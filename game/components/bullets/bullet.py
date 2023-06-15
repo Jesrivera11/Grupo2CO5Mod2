@@ -9,16 +9,21 @@ class Bullet(Sprite):
     BULLETS = {'player': BULLET_SIZE, 'enemy': BULLET_ENEMY_SIZE}
     SPEED = 20
 
-    def __init__(self, spaces):
-        self.image = self.BULLETS[spaces.type]
+    def __init__(self, space):
+        self.image = self.BULLETS[space.type]
         self.rect = self.image.get_rect()
-        self.rect.center = spaces.rect.center
-        self.owner = spaces.type
+        self.rect.center = space.rect.center
+        self.owner = space.type
 
     def update(self, bullets):
-        self.rect.y += self.SPEED
-        if self.rect.y >= SCREEN_HEIGHT:
-            bullets.remove(self)
+         if self.owner == 'enemy':
+            self.rect.y += self.SPEED
+            if self.rect.y >= SCREEN_HEIGHT:
+                bullets.remove(self)
+            elif self.owner == 'player':
+                self.rect.y -= self.SPEED
+                if self.rect.y < (-SCREEN_HEIGHT):
+                    bullets.remove(self)
 
     def draw (self, screen):
-        screen.blit(self.image,(self.rect.x, self.rect.y))
+        screen.blit(self.image, self.rect)

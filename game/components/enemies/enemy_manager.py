@@ -24,3 +24,8 @@ class EnemyManager:
             enemy = Enemy(self.SPEED_Y,self.SPEED_X)
             self.enemies.append(enemy)
             self.last_enemy_time = time.time()
+
+    def Destroy_Enemy(self, bullet):
+        for enemy in self.enemies:
+            if enemy.rect.colliderect(bullet.rect):
+                self.enemies.remove(enemy)
