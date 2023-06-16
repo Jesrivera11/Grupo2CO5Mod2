@@ -1,12 +1,10 @@
 import random
-import time
 from game.components.enemies.enemy import Enemy
 
 
 class EnemyManager:
     def __init__(self):
         self.enemies = []
-        self.last_enemy_time = time.time()
 
     def update(self, game):
         self.add_enemy()
@@ -18,14 +16,17 @@ class EnemyManager:
             enemy.draw(screen)
 
     def add_enemy(self):
-        if len(self.enemies) < 1 or time.time() - self.last_enemy_time >= 2:
-            self.SPEED_Y = random.randint(1,5)
-            self.SPEED_X = random.randint(1,8)
-            enemy = Enemy(self.SPEED_Y,self.SPEED_X)
-            self.enemies.append(enemy)
-            self.last_enemy_time = time.time()
+        enemy_type = random.randint(1,2)
+        if enemy_type ==1:
+            enemy = Enemy()
+        else:
+            x_speed = 5
+            y_speed = 2
+            move_x_for = [50, 120]
+            enemy = Enemy(enemy_type, x_speed, y_speed, move_x_for)
 
-    def Destroy_Enemy(self, bullet):
-        for enemy in self.enemies:
-            if enemy.rect.colliderect(bullet.rect):
-                self.enemies.remove(enemy)
+        if len(self.enemies) < 1:
+            self.enemies.append(enemy)
+
+    def reset(self):
+        self.enemies = []

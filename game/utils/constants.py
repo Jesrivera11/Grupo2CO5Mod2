@@ -30,5 +30,9 @@ ENEMY_1 = pygame.image.load(os.path.join(IMG_DIR, "Enemy/E1.png"))
 ENEMY_2 = pygame.image.load(os.path.join(IMG_DIR, "Enemy/E2.png"))
 
 FONT_STYLE = 'freesansbold.ttf'
+FONT_GAME = os.path.join(IMG_DIR,'Other/swfont.ttf')
 
+COLITION = pygame.image.load(os.path.join(IMG_DIR, "Colitions/1.png"))
+
+GAME_OVER = pygame.image.load(os.path.join(IMG_DIR, 'Other/GameOver.png'))
 
