@@ -7,7 +7,7 @@ from game.components.power_ups.millenium_falcon import MilleniumFalcon
 from game.components.power_ups.heart import Heart
 from game.components.power_ups.y_wing import Ywing
 
-from game.utils.constants import HEART, SPACESHIP, SPACESHIP_SHIELD
+from game.utils.constants import HEART, SPACESHIP, MILLENIUM
 
 
 class PowerUpManager:
@@ -36,14 +36,14 @@ class PowerUpManager:
                     game.player.power_up_type = power_up.type
                     game.player.has_power_up = True
                     game.player.power_time_up = power_up.start_time + (self.duration * 4000)
-                    game.player.set_image((65, 75), SPACESHIP_SHIELD)
+                    game.player.set_image((65, 75), MILLENIUM)
                     self.power_ups.remove(power_up)
 
                 elif power_up.type == 'burst':
                     power_up.start_time = pygame.time.get_ticks()
                     game.player.power_up_type = power_up.type
                     game.player.has_power_up = True
-                    game.player.power_time_up = power_up.start_time + (self.duration * 4000)
+                    game.player.power_time_up = power_up.start_time + (self.duration * 2000)
                     self.power_ups.remove(power_up)
                     
                 elif power_up.type == 'y wing':
