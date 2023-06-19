@@ -15,7 +15,7 @@ MILLENIUM = pygame.image.load(os.path.join(IMG_DIR, 'Spaceship/MilleniumFalcon.p
 
 BG = pygame.image.load(os.path.join(IMG_DIR, 'Other/Track.png'))
 
-HEART = pygame.image.load(os.path.join(IMG_DIR, 'Other/Heart.png'))
+ALLIANCE_TYPE = pygame.image.load(os.path.join(IMG_DIR, 'Other/Heart.png'))
 
 OVER = pygame.image.load(os.path.join(IMG_DIR, 'Other/GameOver.png'))
 
@@ -27,7 +27,7 @@ BULLETS = pygame.image.load(os.path.join(IMG_DIR, 'Other/Bullets.png'))
 
 DEFAULT_TYPE = "default"
 MILLENIUM_TYPE = 'millenium falcon'
-HEART_TYPE = 'heart'
+ALLIANCE_TYPE = 'alliance'
 BULLETS_TYPE = 'burst'
 YWING_TYPE = 'y wing'
 BOMB_TYPE = 'bomb'
