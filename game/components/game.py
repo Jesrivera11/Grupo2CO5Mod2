@@ -1,14 +1,13 @@
 import pygame
 from game.components.bullets.bullet_manager import BulletManager
-from game.components.enemies.enemy_manager import EnemyManager
 from game.components.menu import Menu
+from game.components.enemies.enemy_manager import EnemyManager
+from game.components.power_ups.power_up_manager import PowerUpManager
 
-from game.utils.constants import BG, FONT_GAME,GAME_OVER, HEART, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from game.utils.constants import BG, FONT_STYLE, HEART, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
 from game.components.spaceship import Spaceship
 
 class Game:
-
-
     def __init__(self):
         pygame.init()
         pygame.display.set_caption(TITLE)
@@ -16,36 +15,39 @@ class Game:
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.playing = False
-        self.running= False
+        self.running = False
         self.game_speed = 10
         self.x_pos_bg = 0
         self.y_pos_bg = 0
         self.player = Spaceship()
         self.enemy_manager = EnemyManager()
+        self.power_up_manager = PowerUpManager()
         self.bullet_manager = BulletManager()
         self.death_count = 0
         self.score = 0
-        self.score_total = 0
-        self.lives = 3
-        self.lives_count = 0
-        self.menu = Menu('Press Any key to start...',self.screen)
-        pygame.mixer.music.load("SW.wav")
+        self.best_score = 0
+        self.sound = pygame.mixer.Sound('explosion.wav')
+        pygame.mixer.music.load('StarWars.wav')
         pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(0.1)
+
+        self.menu = Menu ('Press F to Start...', '', '', '', self.screen)
 
     def execute(self):
         self.running = True
         while self.running:
             if not self.playing:
                 self.show_menu()
-                #implementar
         pygame.display.quit()
         pygame.quit()
+
 
     def run(self):
         # Game loop: events - update - draw
         self.score = 0
-        self.bullet_manager.reset() #implementar
-        self.enemy_manager.reset() #implementar
+        self.bullet_manager.reset()
+        self.enemy_manager.reset()
+        self.power_up_manager.reset()
         self.playing = True
         while self.playing:
             self.events()
@@ -57,14 +59,14 @@ class Game:
             if event.type == pygame.QUIT:
                 self.playing = False
 
-
     def update(self):
         user_input = pygame.key.get_pressed()
-        self.player.update(user_input,self)
+        self.player.update(user_input, self)
         self.enemy_manager.update(self)
         self.bullet_manager.update(self)
-
-
+        self.power_up_manager.update(self)
+        self.update_score()
+        self.valide_score()
 
     def draw(self):
         self.clock.tick(FPS)
@@ -73,8 +75,9 @@ class Game:
         self.player.draw(self.screen)
         self.enemy_manager.draw(self.screen)
         self.bullet_manager.draw(self.screen)
-        self.draw_score()
-        self.draw_lives()
+        self.power_up_manager.draw(self.screen)
+        self.draw_score()  #implemenatr
+        self.draw_power_up_time()
         pygame.display.update()
         #pygame.display.flip()
 
@@ -88,63 +91,44 @@ class Game:
             self.y_pos_bg = 0
             
         self.y_pos_bg += self.game_speed
-
+    
     def show_menu(self):
-        half_screen_width = SCREEN_WIDTH // 2
-        half_screen_height = SCREEN_HEIGHT // 2
-
         self.menu.reset_screen_color(self.screen)
 
-        if self.death_count > 0:
-            self.menu.update_message(f'Vidas Perdidas:{self.lives_count}  Score Total:{self.score_total}')
-            self.lives_restart()
+        if self.death_count >0:
+            self.menu.update_message(f'Score: {self.score}', f'High Score: {self.best_score}', f'Deaths: {self.death_count}', 'Press F to Start...')
 
-        icon = pygame.transform.scale(ICON,(80,120))
-        self.screen.blit(icon,(half_screen_width - 50,half_screen_height - 150))
-        self.menu.draw(self.screen)
+        self.menu.draw(self.screen, self)
         self.menu.update(self)
 
-
-
+    def update_score(self):
+        self.score += 1
+    
     def draw_score(self):
-        font = pygame.font.Font(FONT_GAME,15)
-        text = font.render(f'Score: {self.score}',True,(255,255,255))
+        font = pygame.font.Font(FONT_STYLE, 25)
+        text = font.render(f'Score: {self.score}', True, (255,232,31))
         text_rect = text.get_rect()
-        text_rect.center = (1000,20)
-        self.screen.blit(text,text_rect)
+        text_rect.center = (100, 60)
+        self.screen.blit(text, text_rect)
 
-    def subtract_lives(self):
-        if self.lives > 0:
-            self.lives -= 1
-        font = pygame.font.Font(FONT_GAME, 20)
-        text = font.render(f"Vidas Restantes: {self.lives}", True, (255, 255, 255))
-        text_rect = text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2))
-        
-        if self.lives >= 1:
-            self.screen.blit(text, text_rect)
-        else:
-            self.screen.blit(GAME_OVER, text_rect)
+    def valide_score(self):
+        if self.score >= self.best_score:
+            self.best_score = self.score
 
-        pygame.display.update()
-        pygame.time.delay(1000)
-
-
-    def draw_lives(self):
-        heart_rect1 = HEART.get_rect()
-        heart_rect1.center = (1080, 580)
-        heart_rect2 = HEART.get_rect()
-        heart_rect2.center = (1050, 580)
-        heart_rect3 = HEART.get_rect()
-        heart_rect3.center = (1020, 580)
-        self.screen.blit(HEART, heart_rect1)
-
-        if self.lives >= 2:
-            self.screen.blit(HEART, heart_rect2)
-
-        if self.lives == 3:
-            self.screen.blit(HEART, heart_rect3)
-
-        pygame.display.update()
-
-    def lives_restart(self):
-        self.lives = 3
+    def draw_power_up_time(self):
+        if self.player.has_power_up:
+            if self.player.power_up_type != 'heart':
+                if self.player.power_up_type != 'bomb':
+                    time_to_show = round((self.player.power_time_up - pygame.time.get_ticks())/1000, 2)
+                    if time_to_show >=0:
+                        font = pygame.font.Font(FONT_STYLE, 20)
+                        text = font.render(f'{self.player.power_up_type.capitalize()} is enable for {time_to_show} seconds', True, (255,232,31))
+                        text_rect = text.get_rect()
+                        self.screen.blit(text,(700, 40))
+                    else:
+                        self.player_has_power_up = False
+                        self.player.power_up_type = DEFAULT_TYPE
+                        self.player.set_image()
+            else:
+                image_heart = pygame.transform.scale(HEART, (30, 30))
+                self.screen.blit(image_heart, (2, 2))
