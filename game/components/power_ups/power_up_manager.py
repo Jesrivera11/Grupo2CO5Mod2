@@ -4,10 +4,10 @@ import pygame
 from game.components.power_ups.bomb import Bomb
 from game.components.power_ups.more_bullets import MoreBullets
 from game.components.power_ups.millenium_falcon import MilleniumFalcon
-from game.components.power_ups.alliance import Heart
+from game.components.power_ups.heart import Heart
 from game.components.power_ups.y_wing import Ywing
 
-from game.utils.constants import ALLIANCE, SPACESHIP, SPACESHIP_SHIELD
+from game.utils.constants import HEART, SPACESHIP, SPACESHIP_SHIELD
 
 
 class PowerUpManager:
@@ -26,7 +26,7 @@ class PowerUpManager:
             power_up.update(game.game_speed, self.power_ups)
 
             if game.player.rect.colliderect(power_up.rect):
-                if power_up.type == 'alliance':
+                if power_up.type == 'heart':
                     game.player.power_up_type = power_up.type
                     game.player.has_power_up = True
                     self.power_ups.remove(power_up)
@@ -43,7 +43,7 @@ class PowerUpManager:
                     power_up.start_time = pygame.time.get_ticks()
                     game.player.power_up_type = power_up.type
                     game.player.has_power_up = True
-                    game.player.power_time_up = power_up.start_time + (self.duration * 1000)
+                    game.player.power_time_up = power_up.start_time + (self.duration * 4000)
                     self.power_ups.remove(power_up)
                     
                 elif power_up.type == 'y wing':

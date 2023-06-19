@@ -1,6 +1,6 @@
 import pygame
 
-from game.utils.constants import BULLETS_TYPE, DEFAULT_TYPE, ALLIANCE_TYPE, MILLENIUM_TYPE
+from game.utils.constants import BULLETS_TYPE, DEFAULT_TYPE, HEART_TYPE, MILLENIUM_TYPE
 
 
 class BulletManager:

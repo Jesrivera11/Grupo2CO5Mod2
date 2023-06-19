@@ -50,7 +50,7 @@ class Enemy(Sprite):
                         game.player_has_power_up = False
                         game.player.power_up_type = DEFAULT_TYPE
 
-                elif game.player.power_up_type != MILLENIUM_TYPE and game.player.power_up_type != HEART_TYPE: 
+                elif game.player.power_up_type !=   MILLENIUM_TYPE and game.player.power_up_type != HEART_TYPE: 
                     game.death_count += 1
                     game.playing = False
                     pygame.time.delay(1100)
